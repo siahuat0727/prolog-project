@@ -1,15 +1,15 @@
 :- dynamic board/1.
 :- assert(board([_Z1,_Z2,_Z3,_Z4,_Z5,_Z6,_Z7,_Z8,_Z9])).
 
-mark(Player, [X|_],1,1) :- var(X), X=Player.
-mark(Player, [_,X|_],2,1) :- var(X), X=Player.
-mark(Player, [_,_,X|_],3,1) :- var(X), X=Player.
-mark(Player, [_,_,_,X|_],1,2) :- var(X), X=Player.
-mark(Player, [_,_,_,_,X|_],2,2) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,X|_],3,2) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,X|_],1,3) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,X|_],2,3) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,_,X|_],3,3) :- var(X), X=Player.
+mark(Player, [X,_,_,_,_,_,_,_,_],1,1) :- var(X), X=Player.
+mark(Player, [_,X,_,_,_,_,_,_,_],1,2) :- var(X), X=Player.
+mark(Player, [_,_,X,_,_,_,_,_,_],1,3) :- var(X), X=Player.
+mark(Player, [_,_,_,X,_,_,_,_,_],2,1) :- var(X), X=Player.
+mark(Player, [_,_,_,_,X,_,_,_,_],2,2) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,X,_,_,_],2,3) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,X,_,_],3,1) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,X,_],3,2) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,_,X],3,3) :- var(X), X=Player.
 
 record(Player,X,Y) :- 
   retract(board(B)), 
@@ -97,7 +97,20 @@ mark(X) :- \+var(X),write(X).
 
 h(X,Y) :- record(x,X,Y), showBoard.
 
+isSpace([X,_,_,_,_,_,_,_,_], 1) :- var(X).
+isSpace([_,X,_,_,_,_,_,_,_], 2) :- var(X).
+isSpace([_,_,X,_,_,_,_,_,_], 3) :- var(X).
+isSpace([_,_,_,X,_,_,_,_,_], 4) :- var(X).
+isSpace([_,_,_,_,X,_,_,_,_], 5) :- var(X).
+isSpace([_,_,_,_,_,X,_,_,_], 6) :- var(X).
+isSpace([_,_,_,_,_,_,X,_,_], 7) :- var(X).
+isSpace([_,_,_,_,_,_,_,X,_], 8) :- var(X).
+isSpace([_,_,_,_,_,_,_,_,X], 9) :- var(X).
+
 c :- 
    board(B), 
-   alpha_beta(o,2,B,-200,200,(X,Y),_Value), % <=== NOTE
+   findall(S, isSpace(B, S), Spaces),
+   length(Spaces, NumSpace),
+   writeln(NumSpace),
+   alpha_beta(o,NumSpace,B,-200,200,(X,Y),_Value), % <=== NOTE
    record(o,X,Y), showBoard.
