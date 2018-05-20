@@ -1,72 +1,92 @@
 use_module(library(pce)).
+use_module(library(timer)).
 
 gui():-
+    send(@ss, destroy),
+
     new(FORM_MAIN, dialog('GAME - TIC TAC TOE')), 
-    send(FORM_MAIN, size, size(280, 260)),
+    send(FORM_MAIN, size, size(800, 600)),
+
+    new(IMG, image('bg.jpg')),
+    new(PB, bitmap(IMG)),
+    send(PB, size, size(800, 600)),
+    send(FORM_MAIN, display, PB, point(0, 0)),
     
-    new(BTN_00, button(' ')),
-    send(BTN_00, message, message(@prolog, onClick, BTN_00, 0, 0)),
-    get(BTN_00, area, AREA_00),
-    send(AREA_00, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_00),
+    new(@btn_00, button(' ')),
+    send(@btn_00, message, message(@prolog, onClick, @btn_00, 0, 0)),
+    get(@btn_00, area, AREA_00),
+    send(AREA_00, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_00, point(175, 75)),
     
-    new(BTN_01, button(' ')),
-    send(BTN_01, message, message(@prolog, onClick, BTN_01, 0, 1)),
-    get(BTN_01, area, AREA_01),
-    send(AREA_01, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_01),
+    new(@btn_01, button(' ')),
+    send(@btn_01, message, message(@prolog, onClick, @btn_01, 0, 1)),
+    get(@btn_01, area, AREA_01),
+    send(AREA_01, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_01, point(325, 75)),
     
-    new(BTN_02, button(' ')),
-    send(BTN_02, message, message(@prolog, onClick, BTN_02, 0, 2)),
-    get(BTN_02, area, AREA_02),
-    send(AREA_02, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_02),
+    new(@btn_02, button(' ')),
+    send(@btn_02, message, message(@prolog, onClick, @btn_02, 0, 2)),
+    get(@btn_02, area, AREA_02),
+    send(AREA_02, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_02, point(475, 75)),
     
-    new(BTN_10, button(' ')),
-    send(BTN_10, message, message(@prolog, onClick, BTN_10, 1, 0)),
-    get(BTN_10, area, AREA_10),
-    send(AREA_10, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_10, below),
+    new(@btn_10, button(' ')),
+    send(@btn_10, message, message(@prolog, onClick, @btn_10, 1, 0)),
+    get(@btn_10, area, AREA_10),
+    send(AREA_10, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_10, point(175, 225)),
     
-    new(BTN_11, button(' ')),
-    send(BTN_11, message, message(@prolog, onClick, BTN_11, 1, 1)),
-    get(BTN_11, area, AREA_11),
-    send(AREA_11, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_11),
+    new(@btn_11, button(' ')),
+    send(@btn_11, message, message(@prolog, onClick, @btn_11, 1, 1)),
+    get(@btn_11, area, AREA_11),
+    send(AREA_11, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_11, point(325, 225)),
     
-    new(BTN_12, button(' ')),
-    send(BTN_12, message, message(@prolog, onClick, BTN_12, 1, 2)),
-    get(BTN_12, area, AREA_12),
-    send(AREA_12, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_12),
+    new(@btn_12, button(' ')),
+    send(@btn_12, message, message(@prolog, onClick, @btn_12, 1, 2)),
+    get(@btn_12, area, AREA_12),
+    send(AREA_12, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_12, point(475, 225)),
     
-    new(BTN_20, button(' ')),
-    send(BTN_20, message, message(@prolog, onClick, BTN_20, 2, 0)),
-    get(BTN_20, area, AREA_20),
-    send(AREA_20, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_20, below),
+    new(@btn_20, button(' ')),
+    send(@btn_20, message, message(@prolog, onClick, @btn_20, 2, 0)),
+    get(@btn_20, area, AREA_20),
+    send(AREA_20, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_20, point(175, 375)),
     
-    new(BTN_21, button(' ')),
-    send(BTN_21, message, message(@prolog, onClick, BTN_21, 2, 1)),
-    get(BTN_21, area, AREA_21),
-    send(AREA_21, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_21),
+    new(@btn_21, button(' ')),
+    send(@btn_21, message, message(@prolog, onClick, @btn_21, 2, 1)),
+    get(@btn_21, area, AREA_21),
+    send(AREA_21, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_21, point(325, 375)),
     
-    new(BTN_22, button(' ')),
-    send(BTN_22, message, message(@prolog, onClick, BTN_22, 2, 2)),
-    get(BTN_22, area, AREA_22),
-    send(AREA_22, size, size(75, 75)),
-    send(FORM_MAIN, append, BTN_22),
+    new(@btn_22, button(' ')),
+    send(@btn_22, message, message(@prolog, onClick, @btn_22, 2, 2)),
+    get(@btn_22, area, AREA_22),
+    send(AREA_22, size, size(150, 150)),
+    send(FORM_MAIN, display, @btn_22, point(475, 375)),
     
     send(FORM_MAIN, open).
 
 onClick(BTN, X, Y):-
     send(BTN, label, 'CLICKED'),
     get(BTN, area, AREA),
-    send(AREA, size, size(75, 75)),
+    send(AREA, size, size(150, 150)),
     write(X), write(' '), writeln(Y).
     
+splash_screen():-
+   alarm(5, gui(), _Id, [remove(true)]).
+
 main:-
-    gui().
+    new(@ss, dialog('Welcome to TicTacToe!')),
+    send(@ss, size, size(800, 600)),
+
+    new(IMG, image('splash.jpg')),
+    new(PB, bitmap(IMG)),
+    send(PB, size, size(800, 600)),
+    send(@ss, display, PB, point(0, 0)),
+
+    send(@ss, open),
+    splash_screen().
 
 :-  initialization(main).
