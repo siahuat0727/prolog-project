@@ -1,15 +1,15 @@
 :- dynamic board/1.
 :- assert(board([_B1,_B2,_B3,_B4,_B5,_B6,_B7,_B8,_B9])).
 
-mark(Player, [X,_,_,_,_,_,_,_,_],1,1) :- var(X), X=Player.
-mark(Player, [_,X,_,_,_,_,_,_,_],1,2) :- var(X), X=Player.
-mark(Player, [_,_,X,_,_,_,_,_,_],1,3) :- var(X), X=Player.
-mark(Player, [_,_,_,X,_,_,_,_,_],2,1) :- var(X), X=Player.
-mark(Player, [_,_,_,_,X,_,_,_,_],2,2) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,X,_,_,_],2,3) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,X,_,_],3,1) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,X,_],3,2) :- var(X), X=Player.
-mark(Player, [_,_,_,_,_,_,_,_,X],3,3) :- var(X), X=Player.
+mark(Player, [X,_,_,_,_,_,_,_,_],0,0) :- var(X), X=Player.
+mark(Player, [_,X,_,_,_,_,_,_,_],0,1) :- var(X), X=Player.
+mark(Player, [_,_,X,_,_,_,_,_,_],0,2) :- var(X), X=Player.
+mark(Player, [_,_,_,X,_,_,_,_,_],1,0) :- var(X), X=Player.
+mark(Player, [_,_,_,_,X,_,_,_,_],1,1) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,X,_,_,_],1,2) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,X,_,_],2,0) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,X,_],2,1) :- var(X), X=Player.
+mark(Player, [_,_,_,_,_,_,_,_,X],2,2) :- var(X), X=Player.
 
 record(Player,X,Y) :- 
   retract(board(B)), 
@@ -43,15 +43,15 @@ value(Board,V) :-
    length(MIN,Vmin),      % # lines open to x
    V is Vmax - Vmin.
 
-move(P, (1,1), [_B1, B2, B3, B4, B5, B6, B7, B8, B9], [P, B2, B3, B4, B5, B6, B7, B8, B9]).
-move(P, (1,2), [B1, _B2, B3, B4, B5, B6, B7, B8, B9], [B1, P, B3, B4, B5, B6, B7, B8, B9]).
-move(P, (1,3), [B1, B2, _B3, B4, B5, B6, B7, B8, B9], [B1, B2, P, B4, B5, B6, B7, B8, B9]).
-move(P, (2,1), [B1, B2, B3, _B4, B5, B6, B7, B8, B9], [B1, B2, B3, P, B5, B6, B7, B8, B9]).
-move(P, (2,2), [B1, B2, B3, B4, _B5, B6, B7, B8, B9], [B1, B2, B3, B4, P, B6, B7, B8, B9]).
-move(P, (2,3), [B1, B2, B3, B4, B5, _B6, B7, B8, B9], [B1, B2, B3, B4, B5, P, B7, B8, B9]).
-move(P, (3,1), [B1, B2, B3, B4, B5, B6, _B7, B8, B9], [B1, B2, B3, B4, B5, B6, P, B8, B9]).
-move(P, (3,2), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B7, P, B9]).
-move(P, (3,3), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
+move(P, (0,0), [_B1, B2, B3, B4, B5, B6, B7, B8, B9], [P, B2, B3, B4, B5, B6, B7, B8, B9]).
+move(P, (0,1), [B1, _B2, B3, B4, B5, B6, B7, B8, B9], [B1, P, B3, B4, B5, B6, B7, B8, B9]).
+move(P, (0,2), [B1, B2, _B3, B4, B5, B6, B7, B8, B9], [B1, B2, P, B4, B5, B6, B7, B8, B9]).
+move(P, (1,0), [B1, B2, B3, _B4, B5, B6, B7, B8, B9], [B1, B2, B3, P, B5, B6, B7, B8, B9]).
+move(P, (1,1), [B1, B2, B3, B4, _B5, B6, B7, B8, B9], [B1, B2, B3, B4, P, B6, B7, B8, B9]).
+move(P, (1,2), [B1, B2, B3, B4, B5, _B6, B7, B8, B9], [B1, B2, B3, B4, B5, P, B7, B8, B9]).
+move(P, (2,0), [B1, B2, B3, B4, B5, B6, _B7, B8, B9], [B1, B2, B3, B4, B5, B6, P, B8, B9]).
+move(P, (2,1), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B7, P, B9]).
+move(P, (2,2), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
 
 alpha_beta(_Player,0,Board,_Alpha,_Beta,_NoMove,Value) :- 
    value(Board,Value).
