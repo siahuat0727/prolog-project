@@ -1,5 +1,5 @@
 :- dynamic board/1.
-:- assert(board([_Z1,_Z2,_Z3,_Z4,_Z5,_Z6,_Z7,_Z8,_Z9])).
+:- assert(board([_B1,_B2,_B3,_B4,_B5,_B6,_B7,_B8,_B9])).
 
 mark(Player, [X,_,_,_,_,_,_,_,_],1,1) :- var(X), X=Player.
 mark(Player, [_,X,_,_,_,_,_,_,_],1,2) :- var(X), X=Player.
@@ -16,23 +16,23 @@ record(Player,X,Y) :-
   mark(Player,B,X,Y),
   assert(board(B)).
 
-win([X,Y,Z,_,_,_,_,_,_],P) :-  X==P, Y==P, Z==P.
-win([_,_,_,X,Y,Z,_,_,_],P) :-  X==P, Y==P, Z==P.
-win([_,_,_,_,_,_,X,Y,Z],P) :-  X==P, Y==P, Z==P.
-win([X,_,_,Y,_,_,Z,_,_],P) :-  X==P, Y==P, Z==P.
-win([_,X,_,_,Y,_,_,Z,_],P) :-  X==P, Y==P, Z==P.
-win([_,_,X,_,_,Y,_,_,Z],P) :-  X==P, Y==P, Z==P.
-win([X,_,_,_,Y,_,_,_,Z],P) :-  X==P, Y==P, Z==P.
-win([_,_,X,_,Y,_,Z,_,_],P) :-  X==P, Y==P, Z==P.
+win([X,Y,B,_,_,_,_,_,_],P) :-  X==P, Y==P, B==P.
+win([_,_,_,X,Y,B,_,_,_],P) :-  X==P, Y==P, B==P.
+win([_,_,_,_,_,_,X,Y,B],P) :-  X==P, Y==P, B==P.
+win([X,_,_,Y,_,_,B,_,_],P) :-  X==P, Y==P, B==P.
+win([_,X,_,_,Y,_,_,B,_],P) :-  X==P, Y==P, B==P.
+win([_,_,X,_,_,Y,_,_,B],P) :-  X==P, Y==P, B==P.
+win([X,_,_,_,Y,_,_,_,B],P) :-  X==P, Y==P, B==P.
+win([_,_,X,_,Y,_,B,_,_],P) :-  X==P, Y==P, B==P.
 
-open([X,Y,Z,_,_,_,_,_,_],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([_,_,_,X,Y,Z,_,_,_],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([_,_,_,_,_,_,X,Y,Z],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([X,_,_,Y,_,_,Z,_,_],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([_,X,_,_,Y,_,_,Z,_],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([_,_,X,_,_,Y,_,_,Z],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([X,_,_,_,Y,_,_,_,Z],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
-open([_,_,X,_,Y,_,Z,_,_],Player) :- (var(X) | X == Player),(var(Y) | Y == Player), (var(Z) | Z == Player).
+open([X,Y,B,_,_,_,_,_,_],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([_,_,_,X,Y,B,_,_,_],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([_,_,_,_,_,_,X,Y,B],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([X,_,_,Y,_,_,B,_,_],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([_,X,_,_,Y,_,_,B,_],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([_,_,X,_,_,Y,_,_,B],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([X,_,_,_,Y,_,_,_,B],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
+open([_,_,X,_,Y,_,B,_,_],P) :- (var(X) | X == P),(var(Y) | Y == P), (var(B) | B == P).
 
 value(Board, 100) :- win(Board,o), !.
 value(Board,-100) :- win(Board,x), !.
@@ -43,23 +43,29 @@ value(Board,V) :-
    length(MIN,Vmin),      % # lines open to x
    V is Vmax - Vmin.
 
-move(Player, (1,1), [_Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9], [Player, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9]).
-move(Player, (1,2), [Z1, _Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9], [Z1, Player, Z3, Z4, Z5, Z6, Z7, Z8, Z9]).
-move(Player, (1,3), [Z1, Z2, _Z3, Z4, Z5, Z6, Z7, Z8, Z9], [Z1, Z2, Player, Z4, Z5, Z6, Z7, Z8, Z9]).
-move(Player, (2,1), [Z1, Z2, Z3, _Z4, Z5, Z6, Z7, Z8, Z9], [Z1, Z2, Z3, Player, Z5, Z6, Z7, Z8, Z9]).
-move(Player, (2,2), [Z1, Z2, Z3, Z4, _Z5, Z6, Z7, Z8, Z9], [Z1, Z2, Z3, Z4, Player, Z6, Z7, Z8, Z9]).
-move(Player, (2,3), [Z1, Z2, Z3, Z4, Z5, _Z6, Z7, Z8, Z9], [Z1, Z2, Z3, Z4, Z5, Player, Z7, Z8, Z9]).
-move(Player, (3,1), [Z1, Z2, Z3, Z4, Z5, Z6, _Z7, Z8, Z9], [Z1, Z2, Z3, Z4, Z5, Z6, Player, Z8, Z9]).
-move(Player, (3,2), [Z1, Z2, Z3, Z4, Z5, Z6, Z7, _Z8, Z9], [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Player, Z9]).
-move(Player, (3,3), [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, _Z9], [Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Player]).
+move(P, (1,1), [_B1, B2, B3, B4, B5, B6, B7, B8, B9], [P, B2, B3, B4, B5, B6, B7, B8, B9]).
+move(P, (1,2), [B1, _B2, B3, B4, B5, B6, B7, B8, B9], [B1, P, B3, B4, B5, B6, B7, B8, B9]).
+move(P, (1,3), [B1, B2, _B3, B4, B5, B6, B7, B8, B9], [B1, B2, P, B4, B5, B6, B7, B8, B9]).
+move(P, (2,1), [B1, B2, B3, _B4, B5, B6, B7, B8, B9], [B1, B2, B3, P, B5, B6, B7, B8, B9]).
+move(P, (2,2), [B1, B2, B3, B4, _B5, B6, B7, B8, B9], [B1, B2, B3, B4, P, B6, B7, B8, B9]).
+move(P, (2,3), [B1, B2, B3, B4, B5, _B6, B7, B8, B9], [B1, B2, B3, B4, B5, P, B7, B8, B9]).
+move(P, (3,1), [B1, B2, B3, B4, B5, B6, _B7, B8, B9], [B1, B2, B3, B4, B5, B6, P, B8, B9]).
+move(P, (3,2), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B7, P, B9]).
+move(P, (3,3), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
 
 alpha_beta(_Player,0,Board,_Alpha,_Beta,_NoMove,Value) :- 
    value(Board,Value).
 
+someone_win(Board, Value) :- 
+  win(Board, o),
+  Value is 100;
+  win(Board, x),
+  Value is -100.
+
 alpha_beta(Player,D,Board,Alpha,Beta,Move,Value) :- 
    D > 0, 
    findall((X,Y),mark(Player,Board,X,Y),Moves), 
-   Alpha1 is -Beta, % max/min
+   Alpha1 is -Beta,
    Beta1 is -Alpha,
    D1 is D-1, 
    evaluate_and_choose(Player,Moves,Board,D1,Alpha1,Beta1,nil,(Move,Value)).
@@ -85,10 +91,10 @@ other_player(o,x).
 other_player(x,o).
 
 showBoard :- 
-   board([Z1,Z2,Z3,Z4,Z5,Z6,Z7,Z8,Z9]), 
-   write('    '),mark(Z1),write(' '),mark(Z2),write(' '),mark(Z3),nl,
-   write('    '),mark(Z4),write(' '),mark(Z5),write(' '),mark(Z6),nl,
-   write('    '),mark(Z7),write(' '),mark(Z8),write(' '),mark(Z9),nl.
+   board([B1,B2,B3,B4,B5,B6,B7,B8,B9]), 
+   write('    '),mark(B1),write(' '),mark(B2),write(' '),mark(B3),nl,
+   write('    '),mark(B4),write(' '),mark(B5),write(' '),mark(B6),nl,
+   write('    '),mark(B7),write(' '),mark(B8),write(' '),mark(B9),nl.
 
 s :- showBoard.
 
