@@ -1,6 +1,8 @@
 use_module(library(pce)).
 use_module(library(timer)).
 
+:- [tictactoe].
+
 gui():-
     send(@ss, destroy),
 
@@ -69,11 +71,60 @@ gui():-
     send(FORM_MAIN, open).
 
 onClick(BTN, X, Y):-
-    send(BTN, label, 'CLICKED'),
+    send(BTN, label, 'X'),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 150)),
+    h(X, Y),
+    c(A, B),
+    mark_com(A, B),
+
     write(X), write(' '), writeln(Y).
-    
+
+mark_com(0, 0) :-
+    send(@btn_00, label, 'O'),
+    get(@btn_00, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(0, 1) :-
+    send(@btn_01, label, 'O'),
+    get(@btn_01, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(0, 2) :-
+    send(@btn_02, label, 'O'),
+    get(@btn_02, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(1, 0) :-
+    send(@btn_10, label, 'O'),
+    get(@btn_10, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(1, 1) :-
+    send(@btn_11, label, 'O'),
+    get(@btn_11, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(1, 2) :-
+    send(@btn_12, label, 'O'),
+    get(@btn_12, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(2, 0) :-
+    send(@btn_20, label, 'O'),
+    get(@btn_20, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(2, 1) :-
+    send(@btn_21, label, 'O'),
+    get(@btn_21, area, AREA),
+    send(AREA, size, size(150, 150)).
+
+mark_com(2, 2) :-
+    send(@btn_22, label, 'O'),
+    get(@btn_22, area, AREA),
+    send(AREA, size, size(150, 150)).
+
 splash_screen():-
    alarm(5, gui(), _Id, [remove(true)]).
 
@@ -90,3 +141,6 @@ main:-
     splash_screen().
 
 :-  initialization(main).
+
+
+
