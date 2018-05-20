@@ -113,7 +113,7 @@ isSpace([_,_,_,_,_,_,X,_,_], 7) :- var(X).
 isSpace([_,_,_,_,_,_,_,X,_], 8) :- var(X).
 isSpace([_,_,_,_,_,_,_,_,X], 9) :- var(X).
 
-c :- 
+c(X, Y) :- 
    board(B), 
    findall(S, isSpace(B, S), Spaces),
    length(Spaces, NumSpace),
