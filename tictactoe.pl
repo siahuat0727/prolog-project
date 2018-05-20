@@ -118,5 +118,5 @@ c(X, Y) :-
    findall(S, isSpace(B, S), Spaces),
    length(Spaces, NumSpace),
    writeln(NumSpace),
-   alpha_beta(o,NumSpace,B,-200,200,(X,Y),_Value), % <=== NOTE
+   alpha_beta(o,2,B,-200,200,(X,Y),_Value), % <=== NOTE
    record(o,X,Y), showBoard.
