@@ -126,7 +126,7 @@ mark_com(2, 2) :-
     send(AREA, size, size(150, 150)).
 
 splash_screen():-
-   alarm(5, gui(), _Id, [remove(true)]).
+   alarm(0, gui(), _Id, [remove(true)]).
 
 main:-
     new(@ss, dialog('Welcome to TicTacToe!')),

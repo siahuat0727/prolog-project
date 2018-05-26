@@ -54,7 +54,7 @@ move(P, (2,1), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B
 move(P, (2,2), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
 
 alpha_beta(_Player,0,Board,_Alpha,_Beta,_NoMove,Value) :- 
-   value(Board,Value).
+   value(Board,Value), !.
 
 someone_win(Board, Value) :- 
   win(Board, o),
@@ -62,14 +62,23 @@ someone_win(Board, Value) :-
   win(Board, x),
   Value is -100.
 
+my_value(Board, 100, Player) :- win(Board, Player), !.
+  
 alpha_beta(Player,D,Board,Alpha,Beta,Move,Value) :- 
-   D > 0, 
-   findall((X,Y),mark(Player,Board,X,Y),Moves), 
-   Alpha1 is -Beta,
-   Beta1 is -Alpha,
-   D1 is D-1, 
-   evaluate_and_choose(Player,Moves,Board,D1,Alpha1,Beta1,nil,(Move,Value)).
+  D > 0, 
+  (
+    other_player(Player, OtherPlayer),
+    win(Board, OtherPlayer),
+    Value is -100
+  ;
+    findall((X,Y),mark(Player,Board,X,Y),Moves), 
+    Alpha1 is -Beta,
+    Beta1 is -Alpha,
+    D1 is D-1, 
+    evaluate_and_choose(Player,Moves,Board,D1,Alpha1,Beta1,nil,(Move,Value))
+  ).
 
+% to find BestMove
 evaluate_and_choose(Player,[Move|Moves],Board,D,Alpha,Beta,Record,BestMove) :-
    move(Player,Move,Board,Board1), 
    other_player(Player,OtherPlayer),
@@ -78,7 +87,7 @@ evaluate_and_choose(Player,[Move|Moves],Board,D,Alpha,Beta,Record,BestMove) :-
    cutoff(Player,Move,Value1,D,Alpha,Beta,Moves,Board,Record,BestMove).
 evaluate_and_choose(_Player,[],_Board,_D,Alpha,_Beta,Move,(Move,Alpha)).
 
-cutoff(_Player,Move,Value,_D,_Alpha,Beta,_Moves,_Board,_Record,(Move,Value)) :- 
+cutoff(_Playe,Move,Value,_D,_Alpha,Beta,_Moves,_Board,_Record,(Move,Value)) :- 
    Value >= Beta, !.
 cutoff(Player,Move,Value,D,Alpha,Beta,Moves,Board,_Record,BestMove) :- 
    Alpha < Value, Value < Beta, !, 
@@ -91,10 +100,14 @@ other_player(o,x).
 other_player(x,o).
 
 showBoard :- 
-   board([B1,B2,B3,B4,B5,B6,B7,B8,B9]), 
-   write('    '),mark(B1),write(' '),mark(B2),write(' '),mark(B3),nl,
-   write('    '),mark(B4),write(' '),mark(B5),write(' '),mark(B6),nl,
-   write('    '),mark(B7),write(' '),mark(B8),write(' '),mark(B9),nl.
+  board(B),
+  showBoard(B).
+
+showBoard([B1,B2,B3,B4,B5,B6,B7,B8,B9]) :- 
+  write('    '),mark(B1),write(' '),mark(B2),write(' '),mark(B3),nl,
+  write('    '),mark(B4),write(' '),mark(B5),write(' '),mark(B6),nl,
+  write('    '),mark(B7),write(' '),mark(B8),write(' '),mark(B9),nl.
+
 
 s :- showBoard.
 
@@ -114,9 +127,35 @@ isSpace([_,_,_,_,_,_,_,X,_], 8) :- var(X).
 isSpace([_,_,_,_,_,_,_,_,X], 9) :- var(X).
 
 c(X, Y) :- 
-   board(B), 
-   findall(S, isSpace(B, S), Spaces),
-   length(Spaces, NumSpace),
-   writeln(NumSpace),
-   alpha_beta(o,2,B,-200,200,(X,Y),_Value), % <=== NOTE
-   record(o,X,Y), showBoard.
+  board(B), 
+  findall(S, isSpace(B, S), Spaces),
+  length(Spaces, NumSpace),
+  writeln(NumSpace),
+  alpha_beta(o,NumSpace,B,-200,200,(X,Y),_Value), % <=== NOTE % TODO change to Numspace
+  record(o,X,Y), showBoard.
+
+who_win(B, x) :- win(B, x).
+who_win(B, o) :- win(B, o).
+who_win(_B, _).
+
+who_win(X) :-
+  board(B),
+  who_win(B, X).
+
+who_win_if_else(X) :-
+  board(B),
+  (
+    (win(B, x) ->
+      X = x
+    );
+    (win(B, o) ->
+      X = o
+    )
+  );
+  true.
+
+
+
+
+
+
