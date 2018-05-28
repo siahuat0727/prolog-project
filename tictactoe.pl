@@ -1,5 +1,8 @@
-:- dynamic board/1.
-:- assert(board([_B1,_B2,_B3,_B4,_B5,_B6,_B7,_B8,_B9])).
+:- dynamic board/1, board_init.
+
+board_init :-
+    retract_all(board(_)),
+    assert(board([_B1,_B2,_B3,_B4,_B5,_B6,_B7,_B8,_B9])).
 
 mark(Player, [X,_,_,_,_,_,_,_,_],0,0) :- var(X), X=Player.
 mark(Player, [_,X,_,_,_,_,_,_,_],0,1) :- var(X), X=Player.
