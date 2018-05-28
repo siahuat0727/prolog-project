@@ -1,7 +1,7 @@
 :- dynamic board/1, board_init.
 
 board_init :-
-    retract_all(board(_)),
+    retractall(board(_)),
     assert(board([_B1,_B2,_B3,_B4,_B5,_B6,_B7,_B8,_B9])).
 
 mark(Player, [X,_,_,_,_,_,_,_,_],0,0) :- var(X), X=Player.
@@ -118,7 +118,7 @@ h(X,Y) :- record(x,X,Y), showBoard.
 
 c(X, Y) :- 
   board(B), 
-  findall((X_,Y_),mark(Player,B,X_,Y_),Moves), 
+  findall((X_,Y_),mark(_,B,X_,Y_),Moves), 
   length(Moves, NumMove),
   writeln(NumMove),
   alpha_beta(o,NumMove,B,-200,200,(X,Y),_Value),
