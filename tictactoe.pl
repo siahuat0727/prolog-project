@@ -46,15 +46,18 @@ value(Board,V) :-
    length(MIN,Vmin),      % # lines open to x
    V is Vmax - Vmin.
 
-move(P, (0,0), [_B1, B2, B3, B4, B5, B6, B7, B8, B9], [P, B2, B3, B4, B5, B6, B7, B8, B9]).
-move(P, (0,1), [B1, _B2, B3, B4, B5, B6, B7, B8, B9], [B1, P, B3, B4, B5, B6, B7, B8, B9]).
-move(P, (0,2), [B1, B2, _B3, B4, B5, B6, B7, B8, B9], [B1, B2, P, B4, B5, B6, B7, B8, B9]).
-move(P, (1,0), [B1, B2, B3, _B4, B5, B6, B7, B8, B9], [B1, B2, B3, P, B5, B6, B7, B8, B9]).
-move(P, (1,1), [B1, B2, B3, B4, _B5, B6, B7, B8, B9], [B1, B2, B3, B4, P, B6, B7, B8, B9]).
-move(P, (1,2), [B1, B2, B3, B4, B5, _B6, B7, B8, B9], [B1, B2, B3, B4, B5, P, B7, B8, B9]).
-move(P, (2,0), [B1, B2, B3, B4, B5, B6, _B7, B8, B9], [B1, B2, B3, B4, B5, B6, P, B8, B9]).
-move(P, (2,1), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B7, P, B9]).
-move(P, (2,2), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
+move(P, (X, Y), B, B1) :-
+    copy_term(B, B1),
+    mark(P, B1, X, Y).
+% move(P, (0,0), [_B1, B2, B3, B4, B5, B6, B7, B8, B9], [P, B2, B3, B4, B5, B6, B7, B8, B9]).
+% move(P, (0,1), [B1, _B2, B3, B4, B5, B6, B7, B8, B9], [B1, P, B3, B4, B5, B6, B7, B8, B9]).
+% move(P, (0,2), [B1, B2, _B3, B4, B5, B6, B7, B8, B9], [B1, B2, P, B4, B5, B6, B7, B8, B9]).
+% move(P, (1,0), [B1, B2, B3, _B4, B5, B6, B7, B8, B9], [B1, B2, B3, P, B5, B6, B7, B8, B9]).
+% move(P, (1,1), [B1, B2, B3, B4, _B5, B6, B7, B8, B9], [B1, B2, B3, B4, P, B6, B7, B8, B9]).
+% move(P, (1,2), [B1, B2, B3, B4, B5, _B6, B7, B8, B9], [B1, B2, B3, B4, B5, P, B7, B8, B9]).
+% move(P, (2,0), [B1, B2, B3, B4, B5, B6, _B7, B8, B9], [B1, B2, B3, B4, B5, B6, P, B8, B9]).
+% move(P, (2,1), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B7, P, B9]).
+% move(P, (2,2), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
 
 someone_win(Board, Value) :- 
   win(Board, o),
