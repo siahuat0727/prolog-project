@@ -53,16 +53,14 @@ move(P, (2,0), [B1, B2, B3, B4, B5, B6, _B7, B8, B9], [B1, B2, B3, B4, B5, B6, P
 move(P, (2,1), [B1, B2, B3, B4, B5, B6, B7, _B8, B9], [B1, B2, B3, B4, B5, B6, B7, P, B9]).
 move(P, (2,2), [B1, B2, B3, B4, B5, B6, B7, B8, _B9], [B1, B2, B3, B4, B5, B6, B7, B8, P]).
 
-alpha_beta(_Player,0,Board,_Alpha,_Beta,_NoMove,Value) :- 
-   value(Board,Value), !.
-
 someone_win(Board, Value) :- 
   win(Board, o),
   Value is 100;
   win(Board, x),
   Value is -100.
 
-my_value(Board, 100, Player) :- win(Board, Player), !.
+alpha_beta(_Player,0,Board,_Alpha,_Beta,_NoMove,Value) :- 
+   value(Board,Value), !.
   
 alpha_beta(Player,D,Board,Alpha,Beta,Move,Value) :- 
   D > 0, 
@@ -108,7 +106,6 @@ showBoard([B1,B2,B3,B4,B5,B6,B7,B8,B9]) :-
   write('    '),mark(B4),write(' '),mark(B5),write(' '),mark(B6),nl,
   write('    '),mark(B7),write(' '),mark(B8),write(' '),mark(B9),nl.
 
-
 s :- showBoard.
 
 mark(X) :- var(X), write('#').
@@ -116,22 +113,12 @@ mark(X) :- \+var(X),write(X).
 
 h(X,Y) :- record(x,X,Y), showBoard.
 
-isSpace([X,_,_,_,_,_,_,_,_], 1) :- var(X).
-isSpace([_,X,_,_,_,_,_,_,_], 2) :- var(X).
-isSpace([_,_,X,_,_,_,_,_,_], 3) :- var(X).
-isSpace([_,_,_,X,_,_,_,_,_], 4) :- var(X).
-isSpace([_,_,_,_,X,_,_,_,_], 5) :- var(X).
-isSpace([_,_,_,_,_,X,_,_,_], 6) :- var(X).
-isSpace([_,_,_,_,_,_,X,_,_], 7) :- var(X).
-isSpace([_,_,_,_,_,_,_,X,_], 8) :- var(X).
-isSpace([_,_,_,_,_,_,_,_,X], 9) :- var(X).
-
 c(X, Y) :- 
   board(B), 
-  findall(S, isSpace(B, S), Spaces),
-  length(Spaces, NumSpace),
-  writeln(NumSpace),
-  alpha_beta(o,NumSpace,B,-200,200,(X,Y),_Value), % <=== NOTE % TODO change to Numspace
+  findall((X_,Y_),mark(Player,B,X_,Y_),Moves), 
+  length(Moves, NumMove),
+  writeln(NumMove),
+  alpha_beta(o,NumMove,B,-200,200,(X,Y),_Value),
   record(o,X,Y), showBoard.
 
 who_win(B, x) :- win(B, x).
@@ -141,21 +128,3 @@ who_win(_B, _).
 who_win(X) :-
   board(B),
   who_win(B, X).
-
-who_win_if_else(X) :-
-  board(B),
-  (
-    (win(B, x) ->
-      X = x
-    );
-    (win(B, o) ->
-      X = o
-    )
-  );
-  true.
-
-
-
-
-
-

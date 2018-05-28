@@ -1,140 +1,97 @@
+:- dynamic(gui/0).
 use_module(library(pce)).
 use_module(library(timer)).
 
 :- [tictactoe].
 
+create_button(BTN, X, Y, POS_X, POS_Y, WIDTH, HEIGHT) :-
+    new(BTN, button(' ')),
+    send(BTN, message, message(@prolog, onClick, BTN, X, Y)),
+    get(BTN, area, AREA),
+    send(AREA, size, size(WIDTH, HEIGHT)),
+    send(@form_main, display, BTN, point(POS_X, POS_Y)).
+
+create_button(BTN, X, Y, POS_X, POS_Y) :-
+    create_button(BTN, X, Y, POS_X, POS_Y, 150, 150).
+
 gui():-
     send(@ss, destroy),
 
-    new(FORM_MAIN, dialog('GAME - TIC TAC TOE')), 
-    send(FORM_MAIN, size, size(800, 600)),
+    new(@form_main, dialog('GAME - TIC TAC TOE')), 
+    send(@form_main, size, size(800, 600)),
 
     new(IMG, image('bg.jpg')),
     new(PB, bitmap(IMG)),
     send(PB, size, size(800, 600)),
-    send(FORM_MAIN, display, PB, point(0, 0)),
+    send(@form_main, display, PB, point(0, 0)),
     
-    new(@btn_00, button(' ')),
-    send(@btn_00, message, message(@prolog, onClick, @btn_00, 0, 0)),
-    get(@btn_00, area, AREA_00),
-    send(AREA_00, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_00, point(175, 75)),
-    
-    new(@btn_01, button(' ')),
-    send(@btn_01, message, message(@prolog, onClick, @btn_01, 0, 1)),
-    get(@btn_01, area, AREA_01),
-    send(AREA_01, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_01, point(325, 75)),
-    
-    new(@btn_02, button(' ')),
-    send(@btn_02, message, message(@prolog, onClick, @btn_02, 0, 2)),
-    get(@btn_02, area, AREA_02),
-    send(AREA_02, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_02, point(475, 75)),
-    
-    new(@btn_10, button(' ')),
-    send(@btn_10, message, message(@prolog, onClick, @btn_10, 1, 0)),
-    get(@btn_10, area, AREA_10),
-    send(AREA_10, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_10, point(175, 225)),
-    
-    new(@btn_11, button(' ')),
-    send(@btn_11, message, message(@prolog, onClick, @btn_11, 1, 1)),
-    get(@btn_11, area, AREA_11),
-    send(AREA_11, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_11, point(325, 225)),
-    
-    new(@btn_12, button(' ')),
-    send(@btn_12, message, message(@prolog, onClick, @btn_12, 1, 2)),
-    get(@btn_12, area, AREA_12),
-    send(AREA_12, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_12, point(475, 225)),
-    
-    new(@btn_20, button(' ')),
-    send(@btn_20, message, message(@prolog, onClick, @btn_20, 2, 0)),
-    get(@btn_20, area, AREA_20),
-    send(AREA_20, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_20, point(175, 375)),
-    
-    new(@btn_21, button(' ')),
-    send(@btn_21, message, message(@prolog, onClick, @btn_21, 2, 1)),
-    get(@btn_21, area, AREA_21),
-    send(AREA_21, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_21, point(325, 375)),
-    
-    new(@btn_22, button(' ')),
-    send(@btn_22, message, message(@prolog, onClick, @btn_22, 2, 2)),
-    get(@btn_22, area, AREA_22),
-    send(AREA_22, size, size(150, 150)),
-    send(FORM_MAIN, display, @btn_22, point(475, 375)),
-    
-    send(FORM_MAIN, open).
+    create_button(@btn_00, 0, 0, 175, 75),
+    create_button(@btn_01, 0, 1, 325, 75),
+    create_button(@btn_02, 0, 2, 475, 75),
+    create_button(@btn_10, 1, 0, 175, 225),
+    create_button(@btn_11, 1, 1, 325, 225),
+    create_button(@btn_12, 1, 2, 475, 225),
+    create_button(@btn_20, 2, 0, 175, 375),
+    create_button(@btn_21, 2, 1, 325, 375),
+    create_button(@btn_22, 2, 2, 475, 375),
+    create_button(@btn_restart, 5, 5, 325, 530, 150, 75),
+    send(@form_main, open).
 
-onClick(BTN, X, Y):-
+onClick(BTN, 5, 5) :-   
+    send(@form_main, destroy),
+    main.
+
+onClick(BTN, X, Y) :-
     send(BTN, label, 'X'),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 150)),
     h(X, Y),
     c(A, B),
     mark_com(A, B),
-
     write(X), write(' '), writeln(Y).
 
-mark_com(0, 0) :-
-    send(@btn_00, label, 'O'),
-    get(@btn_00, area, AREA),
-    send(AREA, size, size(150, 150)).
+get_button(0, 0, @btn_00).
+get_button(0, 1, @btn_01).
+get_button(0, 2, @btn_02).
+get_button(1, 0, @btn_10).
+get_button(1, 1, @btn_11).
+get_button(1, 2, @btn_12).
+get_button(2, 0, @btn_20).
+get_button(2, 1, @btn_21).
+get_button(2, 2, @btn_22).
 
-mark_com(0, 1) :-
-    send(@btn_01, label, 'O'),
-    get(@btn_01, area, AREA),
-    send(AREA, size, size(150, 150)).
+mark_com(X, Y) :-
+    get_button(X, Y, BTN),
+    mark_com(BTN).
 
-mark_com(0, 2) :-
-    send(@btn_02, label, 'O'),
-    get(@btn_02, area, AREA),
-    send(AREA, size, size(150, 150)).
-
-mark_com(1, 0) :-
-    send(@btn_10, label, 'O'),
-    get(@btn_10, area, AREA),
-    send(AREA, size, size(150, 150)).
-
-mark_com(1, 1) :-
-    send(@btn_11, label, 'O'),
-    get(@btn_11, area, AREA),
-    send(AREA, size, size(150, 150)).
-
-mark_com(1, 2) :-
-    send(@btn_12, label, 'O'),
-    get(@btn_12, area, AREA),
-    send(AREA, size, size(150, 150)).
-
-mark_com(2, 0) :-
-    send(@btn_20, label, 'O'),
-    get(@btn_20, area, AREA),
-    send(AREA, size, size(150, 150)).
-
-mark_com(2, 1) :-
-    send(@btn_21, label, 'O'),
-    get(@btn_21, area, AREA),
-    send(AREA, size, size(150, 150)).
-
-mark_com(2, 2) :-
-    send(@btn_22, label, 'O'),
-    get(@btn_22, area, AREA),
+mark_com(BTN) :-
+    send(BTN, label, 'O'),
+    get(BTN, area, AREA),
     send(AREA, size, size(150, 150)).
 
 splash_screen():-
    alarm(5, gui(), _Id, [remove(true)]).
 
-single :-
+computer_first :-
+    gui(),
+    c(A, B),
+    mark_com(A, B).
+
+you_first :-
     gui().
 
-multi :-
-    gui().
+x(1).
+x(2).
+x(3).
+y(1).
+y(2).
+y(3).
+
+
+xy
 
 main:-
+    find_all((X, Y), )
     new(@ss, dialog('Welcome to TicTacToe!')),
     send(@ss, size, size(800, 600)),
 
@@ -143,17 +100,17 @@ main:-
     send(PB, size, size(800, 600)),
     send(@ss, display, PB, point(0, 0)),
 
-    new(@btn_single, button('SINGLE')),
-    send(@btn_single, message, message(@prolog, single)),
-    get(@btn_single, area, AREA_single),
-    send(AREA_single, size, size(200, 75)),
-    send(@ss, display, @btn_single, point(550, 350)),
+    new(@btn_computer_first, button('COMPUTER FIRST')),
+    send(@btn_computer_first, message, message(@prolog, computer_first)),
+    get(@btn_computer_first, area, AREA_computer_first),
+    send(AREA_computer_first, size, size(200, 75)),
+    send(@ss, display, @btn_computer_first, point(550, 350)),
 
-    new(@btn_multi, button('MULTI-PLAYER')),
-    send(@btn_multi, message, message(@prolog, multi)),
-    get(@btn_multi, area, AREA_multi),
-    send(AREA_multi, size, size(200, 75)),
-    send(@ss, display, @btn_multi, point(550, 450)),
+    new(@btn_you_first, button('YOU FIRST')),
+    send(@btn_you_first, message, message(@prolog, you_first)),
+    get(@btn_you_first, area, AREA_you_first),
+    send(AREA_you_first, size, size(200, 75)),
+    send(@ss, display, @btn_you_first, point(550, 450)),
 
     send(@ss, open).
     % splash_screen().
