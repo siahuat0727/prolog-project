@@ -4,15 +4,18 @@ use_module(library(timer)).
 
 :- [tictactoe].
 
-create_button(BTN, X, Y, WIDTH, HEIGHT) :-
+create_button(BTN, X, Y) :-
     new(BTN, button(' ')),
     send(BTN, message, message(@prolog, onClick, BTN, X, Y)),
     get(BTN, area, AREA),
-    send(AREA, size, size(WIDTH, HEIGHT)).
+    send(AREA, size, size(150, 150)).
 
-create_button(BTN, X, Y) :-
-    create_button(BTN, X, Y, 150, 150).
-
+create_restart(BTN) :-
+    new(BTN, button('RESTART')),
+    send(BTN, message, message(@prolog, db)),
+    get(BTN, area, AREA),
+    send(AREA, size, size(150, 75)).
+    
 gui():-
 
     new(@form_main, dialog('GAME - TIC TAC TOE')), 
@@ -35,7 +38,7 @@ gui():-
     send(@form_main, display, @btn_restart, point(325, 530)),
     send(@form_main, open).
 
-create_button() :-
+cb :-
     create_button(@btn_00, 0, 0),
     create_button(@btn_01, 0, 1),
     create_button(@btn_02, 0, 2),
@@ -44,23 +47,25 @@ create_button() :-
     create_button(@btn_12, 1, 2),
     create_button(@btn_20, 2, 0),
     create_button(@btn_21, 2, 1),
-    create_button(@btn_22, 2, 2),
-    create_button(@btn_restart, 5, 5, 150, 75).
+    create_button(@btn_22, 2, 2).
 
-onClick(BTN, 5, 5) :-   
-    send(@btn_00, label, ''),
-    send(@btn_01, label, ''),
-    send(@btn_02, label, ''),
-    send(@btn_10, label, ''),
-    send(@btn_11, label, ''),
-    send(@btn_12, label, ''),
-    send(@btn_20, label, ''),
-    send(@btn_21, label, ''),
-    send(@btn_22, label, ''),
+db :-   
+    send(@btn_00, destroy),
+    send(@btn_01, destroy),
+    send(@btn_02, destroy),
+    send(@btn_10, destroy),
+    send(@btn_11, destroy),
+    send(@btn_12, destroy),
+    send(@btn_20, destroy),
+    send(@btn_21, destroy),
+    send(@btn_22, destroy),
     send(@form_main, destroy).
 
 onClick(BTN, X, Y) :-
-    send(BTN, label, 'X'),
+    new(IMG, image('red.jpg')),
+    new(PB, bitmap(IMG)),
+    send(PB, size, size(150, 150)),
+    send(BTN, label, PB),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 150)),
     h(X, Y),
@@ -83,7 +88,10 @@ mark_com(X, Y) :-
     mark_com(BTN).
 
 mark_com(BTN) :-
-    send(BTN, label, 'O'),
+    new(IMG, image('blue.jpg')),
+    new(PB, bitmap(IMG)),
+    send(PB, size, size(150, 150)),
+    send(BTN, label, PB),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 150)).
 
@@ -91,17 +99,19 @@ splash_screen():-
    alarm(5, gui(), _Id, [remove(true)]).
 
 computer_first :-
+    cb,
     board_init,
     gui(),
     c(A, B),
     mark_com(A, B).
 
 you_first :-
+    cb,
     board_init,
     gui().
 
 main:-
-    create_button,
+    create_restart(@btn_restart),
     new(@ss, dialog('Welcome to TicTacToe!')),
     send(@ss, size, size(800, 600)),
 
