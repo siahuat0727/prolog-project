@@ -118,6 +118,8 @@ c(X, Y) :-
   alpha_beta(o,NumMove,B,-200,200,(X,Y),_Value),
   record(o,X,Y), showBoard.
 
+c :- c(X, Y).
+
 who_win(B, x) :- win(B, x).
 who_win(B, o) :- win(B, o).
 who_win(_B, _).
@@ -125,3 +127,7 @@ who_win(_B, _).
 who_win(X) :-
   board(B),
   who_win(B, X).
+
+is_terminate(X) :-
+  who_win(X),
+  var(X).
