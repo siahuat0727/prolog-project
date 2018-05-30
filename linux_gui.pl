@@ -38,6 +38,21 @@ gui():-
     send(@form_main, display, @btn_restart, point(325, 530)),
     send(@form_main, open).
 
+gui_end() :-
+    new(end, dialog('GAME OVER')),
+    send(end, size, size(300, 200)),
+
+    new(btn_game_over, button('RESTART')),
+    send(btn_game_over, message, message(@prolog, db)),
+    get(btn_game_over, area, AREA),
+    send(AREA, size, size(100, 60)),
+
+    send(end, display, btn_game_over, point(100, 100)),
+    send(end, display, text('Game Over'), point(100, 20)),
+
+    send(end, open).
+
+
 cb :-
     create_button(@btn_00, 0, 0),
     create_button(@btn_01, 0, 1),
@@ -62,10 +77,7 @@ db :-
     send(@form_main, destroy).
 
 onClick(BTN, X, Y) :-
-    new(IMG, image('red.jpg')),
-    new(PB, bitmap(IMG)),
-    send(PB, size, size(150, 150)),
-    send(BTN, label, PB),
+    send(BTN, label, @pb1),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 150)),
     h(X, Y),
@@ -88,10 +100,7 @@ mark_com(X, Y) :-
     mark_com(BTN).
 
 mark_com(BTN) :-
-    new(IMG, image('blue.jpg')),
-    new(PB, bitmap(IMG)),
-    send(PB, size, size(150, 150)),
-    send(BTN, label, PB),
+    send(BTN, label, @pb2),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 150)).
 
@@ -112,6 +121,14 @@ you_first :-
 
 main:-
     create_restart(@btn_restart),
+
+    new(@img1, image('red.jpg')),
+    new(@pb1, bitmap(@img1)),
+    send(@pb1, size, size(150, 150)),
+    new(@img2, image('blue.jpg')),
+    new(@pb2, bitmap(@img2)),
+    send(@pb2, size, size(150, 150)),
+
     new(@ss, dialog('Welcome to TicTacToe!')),
     send(@ss, size, size(800, 600)),
 
