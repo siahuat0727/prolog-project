@@ -12,7 +12,7 @@ create_button(BTN, X, Y) :-
 
 create_restart(BTN) :-
     new(BTN, button('RESTART')),
-    send(BTN, message, message(@prolog, db)),
+    send(BTN, message, message(@prolog, delete_button)),
     get(BTN, area, AREA),
     send(AREA, size, size(150, 75)).
     
@@ -53,7 +53,7 @@ gui_end() :-
     send(end, open).
 
 
-cb :-
+create_button :-
     create_button(@btn_00, 0, 0),
     create_button(@btn_01, 0, 1),
     create_button(@btn_02, 0, 2),
@@ -64,7 +64,7 @@ cb :-
     create_button(@btn_21, 2, 1),
     create_button(@btn_22, 2, 2).
 
-db :-   
+delete_button :-   
     send(@btn_00, destroy),
     send(@btn_01, destroy),
     send(@btn_02, destroy),
@@ -108,14 +108,14 @@ splash_screen():-
    alarm(5, gui(), _Id, [remove(true)]).
 
 computer_first :-
-    cb,
+    create_button,
     board_init,
     gui(),
     c(A, B),
     mark_com(A, B).
 
 you_first :-
-    cb,
+    create_button,
     board_init,
     gui().
 
