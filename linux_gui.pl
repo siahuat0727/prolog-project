@@ -16,8 +16,7 @@ create_restart(BTN) :-
     get(BTN, area, AREA),
     send(AREA, size, size(150, 75)).
     
-gui():-
-
+gui() :-
     new(@form_main, dialog('GAME - TIC TAC TOE')), 
     send(@form_main, size, size(800, 600)),
 
@@ -122,10 +121,10 @@ you_first :-
 main:-
     create_restart(@btn_restart),
 
-    new(@img1, image('red.jpg')),
+    new(@img1, image('lab.jpg')),
     new(@pb1, bitmap(@img1)),
     send(@pb1, size, size(150, 150)),
-    new(@img2, image('blue.jpg')),
+    new(@img2, image('hub.jpg')),
     new(@pb2, bitmap(@img2)),
     send(@pb2, size, size(150, 150)),
 
